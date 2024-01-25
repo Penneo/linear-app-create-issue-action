@@ -79,11 +79,16 @@ class Linear {
     readData(data, replaces) {
         const front = yaml_front_matter_1.loadFront(data);
         const { __content, title, description } = front, other = __rest(front, ["__content", "title", "description"]);
+        const replacedOther = other;
         let replacedTitle = title;
         if (replaces !== undefined) {
             replacedTitle = this.resolveFormatString(title, replaces);
+            for (const key of Object.keys(other)) {
+                if (typeof other[key] === "string")
+                    replacedOther[key] = this.resolveFormatString(other[key], replaces);
+            }
         }
-        this.issueData = Object.assign({ title: replacedTitle, description: __content }, other);
+        this.issueData = Object.assign({ title: replacedTitle, description: __content }, replacedOther);
         return this.issueData;
     }
 }

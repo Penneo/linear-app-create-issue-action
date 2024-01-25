@@ -3,6 +3,7 @@ import { loadFront } from "yaml-front-matter";
 
 // eslint-disable-next-line node/no-missing-import
 import { IssueCreateInput } from "@linear/sdk/dist/_generated_documents";
+import { isString } from "util";
 
 export class UndefinedError extends Error {
   constructor(content: string) {
@@ -74,15 +75,22 @@ export class Linear {
     const front = loadFront(data);
     const { __content, title, description, ...other } = front;
 
+    const replacedOther: { [key: string]: any } = other;
     let replacedTitle = title;
+
     if (replaces !== undefined) {
       replacedTitle = this.resolveFormatString(title, replaces);
+
+      for (const key of Object.keys(other)) {
+        if (typeof other[key] === "string")
+          replacedOther[key] = this.resolveFormatString(other[key], replaces);
+      }
     }
 
     this.issueData = {
       title: replacedTitle,
       description: __content,
-      ...other,
+      ...replacedOther,
     };
 
     return this.issueData;

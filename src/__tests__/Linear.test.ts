@@ -130,11 +130,16 @@ describe(Linear, () => {
       linear.isDryrun = true;
 
       const data = readFileSync("./src/__tests__/test_with_replace.md");
-      const issueData = linear.readData(data, { month: "July", day: "13" });
+      const issueData = linear.readData(data, {
+        month: "July",
+        day: "13",
+        labelIds: "123,555",
+      });
 
       expect(issueData).toEqual({
         title: "test issue (13, July)",
         estimate: 1,
+        labelIds: "123,555",
         description:
           "\n\n## Items\n* Item 1\n* Item 2\n* Item 3\n\n## CheckBoxes\n- [ ] CheckBox 1\n- [ ] CheckBox 2\n\n*created by [hoge](https://github.com)*\n",
       });

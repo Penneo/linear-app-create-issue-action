@@ -1,6 +1,7 @@
 ---
 title: test issue (${day}, ${month})
 estimate: 1
+labelIds: ${labelIds}
 ---
 
 ## Items
