@@ -7,6 +7,9 @@ module.exports = {
   transform: {
     '^.+\\.ts$': 'ts-jest'
   },
+  setupFiles: [
+    './src/__tests__/setup.ts'
+  ],
   verbose: true,
   collectCoverageFrom: [
     "src/**/*.{js,ts}",
