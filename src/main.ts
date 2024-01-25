@@ -60,7 +60,11 @@ async function run(): Promise<void> {
 
     await main(issueFilePath, apiKey, teamId, stateId, isDryrun, embed);
   } catch (error) {
-    setFailed(error.message);
+    if (error instanceof Error) {
+      setFailed(error?.message);
+    } else  {
+      setFailed(String(error));
+    }
   }
 }
 
