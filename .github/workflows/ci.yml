@@ -60,11 +60,6 @@ jobs:
       - run: npm run test-lint
       - name: Run Jest
         run: npm run test:ci
-      - uses: codecov/codecov-action@v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }} # not required for public repos
-          directory: ./coverage/ # optional
-          fail_ci_if_error: true # optional2 (default = false)
 
   e2e-test: # make sure the action works on a clean machine without building
     runs-on: ubuntu-latest
