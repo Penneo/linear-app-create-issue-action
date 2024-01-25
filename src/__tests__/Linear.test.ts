@@ -1,4 +1,8 @@
 // eslint-disable-next-line node/no-unpublished-import
+import fetch from 'node-fetch';
+// @ts-ignore
+global.fetch = fetch;
+
 import nock from "nock";
 import { Linear } from "../Linear";
 import { readFileSync } from "fs";
@@ -15,8 +19,7 @@ describe(Linear, () => {
   });
 
   describe("#createIssue", () => {
-    // nock doesn't work for some reason, skipping the test for now
-    test.skip("create issue from input", async () => {
+    test("create issue from input", async () => {
       nock(basePath)
         .post(endpoint, {
           query: /.+/,
@@ -56,8 +59,7 @@ describe(Linear, () => {
       });
     });
 
-    // nock doesn't work for some reason, skipping the test for now
-    test.skip("create issue from markdown", async () => {
+    test("create issue from markdown", async () => {
       nock(basePath)
         .post(endpoint, {
           query: /.+/,
