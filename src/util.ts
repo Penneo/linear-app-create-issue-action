@@ -2,12 +2,15 @@ export const parseEmbed = (inputEmbed: string) => {
   if (inputEmbed === "" || inputEmbed === undefined) {
     return undefined;
   }
-  const splitEmbed = inputEmbed.split(",");
   const recordedEmbed: { [x: string]: string } = {};
-  for (const e of splitEmbed) {
-    const keyAndValue = e.split("=");
-    recordedEmbed[keyAndValue[0]] = keyAndValue[1];
-  }
+  const regex = /([^,=]+)=((?:"[^"]+"|'[^']+'|[^,]+))/g;
+
+  inputEmbed.match(regex)?.forEach((match) => {
+    const [fullMatch, key, value] = match.match(/([^,=]+)=((?:"[^"]+"|'[^']+'|[^,]+))/) || [];
+    if (key !== undefined && value !== undefined) {
+      recordedEmbed[key] = value.replace(/["']/g, '');
+    }
+  });
 
   return recordedEmbed;
 };

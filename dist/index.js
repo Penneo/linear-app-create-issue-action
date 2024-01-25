@@ -173,15 +173,18 @@ run();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseEmbed = void 0;
 const parseEmbed = (inputEmbed) => {
+    var _a;
     if (inputEmbed === "" || inputEmbed === undefined) {
         return undefined;
     }
-    const splitEmbed = inputEmbed.split(",");
     const recordedEmbed = {};
-    for (const e of splitEmbed) {
-        const keyAndValue = e.split("=");
-        recordedEmbed[keyAndValue[0]] = keyAndValue[1];
-    }
+    const regex = /([^,=]+)=((?:"[^"]+"|'[^']+'|[^,]+))/g;
+    (_a = inputEmbed.match(regex)) === null || _a === void 0 ? void 0 : _a.forEach((match) => {
+        const [fullMatch, key, value] = match.match(/([^,=]+)=((?:"[^"]+"|'[^']+'|[^,]+))/) || [];
+        if (key !== undefined && value !== undefined) {
+            recordedEmbed[key] = value.replace(/["']/g, '');
+        }
+    });
     return recordedEmbed;
 };
 exports.parseEmbed = parseEmbed;
