@@ -3,7 +3,7 @@ module.exports = {
     "plugin:github/recommended",
     "@cybozu/eslint-config/presets/node-typescript-prettier",
   ],
-  plugins: ["jest"],
+  plugins: ["jest", "github"],
   env: {
     node: true,
     es6: true,
@@ -16,5 +16,6 @@ module.exports = {
   },
   rules: {
     "node/no-unsupported-features/es-syntax": "off",
+    "filenames/match-regex": "off",
   },
 };

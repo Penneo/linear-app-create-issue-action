@@ -50,7 +50,7 @@ export class Linear {
     if (this.isDryrun) {
       return issueCreateInput;
     }
-    return this.client.issueCreate(issueCreateInput);
+    return this.client.createIssue(issueCreateInput);
   }
 
   private resolveFormatString = (
