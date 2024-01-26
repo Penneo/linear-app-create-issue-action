@@ -99,3 +99,5 @@ src/__tests__/runner/*
 lib/**/*
 
 reports/
+
+.idea/

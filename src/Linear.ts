@@ -1,9 +1,8 @@
 import { LinearClient } from "@linear/sdk";
 import { loadFront } from "yaml-front-matter";
 
-// eslint-disable-next-line node/no-missing-import
+// eslint-disable-next-line node/no-missing-import,import/no-unresolved
 import { IssueCreateInput } from "@linear/sdk/dist/_generated_documents";
-import { isString } from "util";
 
 export class UndefinedError extends Error {
   constructor(content: string) {
@@ -23,7 +22,7 @@ export class Linear {
     private apiKey: string,
     private teamId: string,
     private stateId: string,
-    public isDryrun: boolean = false
+    public isDryrun: boolean = false,
   ) {
     this.client = new LinearClient({ apiKey });
   }
@@ -55,7 +54,7 @@ export class Linear {
 
   private resolveFormatString = (
     formatString: string,
-    replaces: Record<string, unknown>
+    replaces: Record<string, unknown>,
   ) => {
     let resultString = formatString;
     for (const [key, value] of Object.entries(replaces)) {
@@ -70,7 +69,7 @@ export class Linear {
 
   readData(
     data: string | Buffer,
-    replaces?: Record<string, unknown>
+    replaces?: Record<string, unknown>,
   ): IssueData {
     const front = loadFront(data);
     const { __content, title, description, ...other } = front;

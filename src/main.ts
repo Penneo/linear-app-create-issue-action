@@ -9,7 +9,7 @@ async function main(
   teamId: string,
   stateId: string,
   isDryrun: boolean,
-  embed: string
+  embed: string,
 ) {
   if (apiKey === undefined || apiKey === "") {
     throw new UndefinedError("apiKey");
@@ -62,7 +62,7 @@ async function run(): Promise<void> {
   } catch (error) {
     if (error instanceof Error) {
       setFailed(error?.message);
-    } else  {
+    } else {
       setFailed(String(error));
     }
   }
