@@ -40,7 +40,6 @@ class UndefinedError extends Error {
 exports.UndefinedError = UndefinedError;
 class Linear {
     constructor(apiKey, teamId, stateId, isDryrun = false) {
-        this.apiKey = apiKey;
         this.teamId = teamId;
         this.stateId = stateId;
         this.isDryrun = isDryrun;
@@ -57,9 +56,6 @@ class Linear {
         };
         this.client = new sdk_1.LinearClient({ apiKey });
     }
-    /**
-     * create task for check renovate.
-     */
     createIssue(issueData) {
         return __awaiter(this, void 0, void 0, function* () {
             let inputIssueData = issueData;
@@ -84,8 +80,16 @@ class Linear {
         if (replaces !== undefined) {
             replacedTitle = this.resolveFormatString(title, replaces);
             for (const key of Object.keys(other)) {
-                if (typeof other[key] === "string")
+                if (typeof other[key] === "string") {
                     replacedOther[key] = this.resolveFormatString(other[key], replaces);
+                }
+                if (key === "labelIds" && replacedOther[key].includes(",")) {
+                    replacedOther[key] = replacedOther[key]
+                        .split(",")
+                        .map(String)
+                        .filter((x) => !!x)
+                        .map((x) => x.trim());
+                }
             }
         }
         this.issueData = Object.assign({ title: replacedTitle, description: __content }, replacedOther);

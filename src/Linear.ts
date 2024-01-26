@@ -19,7 +19,7 @@ export class Linear {
   private issueData?: IssueData;
 
   constructor(
-    private apiKey: string,
+    apiKey: string,
     private teamId: string,
     private stateId: string,
     public isDryrun: boolean = false,
@@ -27,9 +27,6 @@ export class Linear {
     this.client = new LinearClient({ apiKey });
   }
 
-  /**
-   * create task for check renovate.
-   */
   async createIssue(issueData?: IssueData) {
     let inputIssueData = issueData;
     if (inputIssueData === undefined) {
@@ -49,6 +46,7 @@ export class Linear {
     if (this.isDryrun) {
       return issueCreateInput;
     }
+
     return this.client.createIssue(issueCreateInput);
   }
 
@@ -81,8 +79,17 @@ export class Linear {
       replacedTitle = this.resolveFormatString(title, replaces);
 
       for (const key of Object.keys(other)) {
-        if (typeof other[key] === "string")
+        if (typeof other[key] === "string") {
           replacedOther[key] = this.resolveFormatString(other[key], replaces);
+        }
+
+        if (key === "labelIds" && replacedOther[key].includes(",")) {
+          replacedOther[key] = replacedOther[key]
+            .split(",")
+            .map(String)
+            .filter((x: string) => !!x)
+            .map((x: string) => x.trim());
+        }
       }
     }
 
