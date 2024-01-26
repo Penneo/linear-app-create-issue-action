@@ -39,7 +39,7 @@ class UndefinedError extends Error {
 }
 exports.UndefinedError = UndefinedError;
 class Linear {
-    constructor(apiKey, teamId, stateId, isDryrun = false) {
+    constructor(apiKey, teamId, stateId, isDryrun = false, client = undefined) {
         this.teamId = teamId;
         this.stateId = stateId;
         this.isDryrun = isDryrun;
@@ -54,7 +54,7 @@ class Linear {
             }
             return resultString;
         };
-        this.client = new sdk_1.LinearClient({ apiKey });
+        this.client = client !== null && client !== void 0 ? client : new sdk_1.LinearClient({ apiKey });
     }
     createIssue(issueData) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -69,7 +69,12 @@ class Linear {
             if (this.isDryrun) {
                 return issueCreateInput;
             }
-            return this.client.createIssue(issueCreateInput);
+            const result = yield this.client.createIssue(issueCreateInput);
+            const createdIssue = yield result.issue;
+            if (!createdIssue) {
+                throw new Error("Could not retrieve created issue");
+            }
+            return createdIssue === null || createdIssue === void 0 ? void 0 : createdIssue.identifier;
         });
     }
     readData(data, replaces) {
@@ -148,6 +153,9 @@ function main(issueFilePath, apiKey, teamId, stateId, isDryrun, embed) {
             (0, core_1.info)(`--- !!DRYRUN!! ---`);
         }
         const result = yield client.createIssue();
+        if (!isDryrun && typeof result === "string") {
+            (0, core_1.setOutput)("ticketId", result);
+        }
         (0, core_1.info)(`--- result ${issueFilePath} ---`);
         (0, core_1.info)(JSON.stringify(result, null, 2));
         (0, core_1.info)(`--- done ${issueFilePath} ---`);

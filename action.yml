@@ -26,6 +26,10 @@ inputs:
     required: false
     description: 'embed variable. (ex: "month=July,day=13")'
 
+outputs:
+  ticketId:
+    description: "created linear ticket id (XXX-YYY)"
+
 runs:
   using: 'node20'
   main: 'dist/index.js'

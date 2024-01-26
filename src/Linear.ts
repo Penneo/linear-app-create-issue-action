@@ -23,11 +23,12 @@ export class Linear {
     private teamId: string,
     private stateId: string,
     public isDryrun: boolean = false,
+    client: LinearClient | undefined = undefined,
   ) {
-    this.client = new LinearClient({ apiKey });
+    this.client = client ?? new LinearClient({ apiKey });
   }
 
-  async createIssue(issueData?: IssueData) {
+  async createIssue(issueData?: IssueData): Promise<string | IssueCreateInput> {
     let inputIssueData = issueData;
     if (inputIssueData === undefined) {
       inputIssueData = this.issueData;
@@ -47,7 +48,14 @@ export class Linear {
       return issueCreateInput;
     }
 
-    return this.client.createIssue(issueCreateInput);
+    const result = await this.client.createIssue(issueCreateInput);
+    const createdIssue = await result.issue;
+
+    if (!createdIssue) {
+      throw new Error("Could not retrieve created issue");
+    }
+
+    return createdIssue?.identifier;
   }
 
   private resolveFormatString = (

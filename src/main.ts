@@ -1,4 +1,4 @@
-import { getInput, setFailed, info } from "@actions/core";
+import { getInput, setFailed, info, setOutput } from "@actions/core";
 import { Linear, UndefinedError } from "./Linear";
 import { readFileSync } from "fs";
 import { parseEmbed } from "./util";
@@ -44,6 +44,11 @@ async function main(
     info(`--- !!DRYRUN!! ---`);
   }
   const result = await client.createIssue();
+
+  if (!isDryrun && typeof result === "string") {
+    setOutput("ticketId", result);
+  }
+
   info(`--- result ${issueFilePath} ---`);
   info(JSON.stringify(result, null, 2));
   info(`--- done ${issueFilePath} ---`);
