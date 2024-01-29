@@ -16,7 +16,7 @@ See [action.yml](./action.yml)
 |teamId|team id of Linear.app ([ref](#faq-get-teamid-stateid))|yes|string|
 |stateId|state id of Linear.app ([ref](#faq-get-teamid-stateid))|yes|string|
 |isDryrun|enable dryrun (not create issue) |no|boolean|
-|embed|variables to embed into the yaml block. (ex: "month=July,day=13,labelIds=\"ID-1,ID-2\"")|no|string or comma separated strings|
+|embed|variables to embed into the yaml block. (ex: `"month=July,day=13,labelIds=\"ID-1,ID-2\""`)|no|string or comma separated strings|
 
 ## Usage
 
