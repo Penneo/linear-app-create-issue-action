@@ -2,7 +2,7 @@
 
 GitHub Action to create an Issue for [Linear.app](https://linear.app/).
 
-[![build-test](https://github.com/korosuke613/linear-app-create-issue-action/actions/workflows/ci.yml/badge.svg)](https://github.com/korosuke613/linear-app-create-issue-action/actions/workflows/ci.yml) [![codecov](https://codecov.io/gh/korosuke613/linear-app-create-issue-action/branch/main/graph/badge.svg?token=2XrAav9ZlE)](https://codecov.io/gh/korosuke613/linear-app-create-issue-action)
+[![build-test](https://github.com/Penneo/linear-app-create-issue-action/actions/workflows/ci.yml/badge.svg)](https://github.com/Penneo/linear-app-create-issue-action/actions/workflows/ci.yml)
 
 ## Usage
 
@@ -16,7 +16,7 @@ See [action.yml](./action.yml)
 |teamId|team id of Linear.app ([ref](#faq-get-teamid-stateid))|yes|string|
 |stateId|state id of Linear.app ([ref](#faq-get-teamid-stateid))|yes|string|
 |isDryrun|enable dryrun (not create issue) |no|boolean|
-|embed|embed variable. (ex: "month=July,day=13")|no|string|
+|embed|variables to embed into the yaml block. (ex: "month=July,day=13,labelIds=\"ID-1,ID-2\"")|no|string or comma separated strings|
 
 ## Usage
 
@@ -29,6 +29,7 @@ If you want to change the value of YAML dynamically, you can replace `${somethin
 ```markdown
 ---
 title: Issue file example (${day}, ${month}) # title is required
+labelIds: ${labelIds}
 estimate: 1
 ---
 This block is description.
@@ -42,7 +43,7 @@ This block is description.
 - [ ] CheckBox 1
 - [ ] CheckBox 2
 
-*created by [korosuke613/linear-app-create-issue-action](https://github.com/korosuke613/linear-app-create-issue-action)*
+*created by [Penneo/linear-app-create-issue-action](https://github.com/Penneo/linear-app-create-issue-action)*
 ```
 
 ### Create Workflow
@@ -61,14 +62,13 @@ jobs:
   create-issue:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: korosuke613/linear-app-create-issue-action@v1
+      - uses: penneo/linear-app-create-issue-action@v1
         with:
           issueFilePath: "./example/example-issue.md"
           apiKey: ${{ secrets.YOUR_API_TOKEN_OF_LINEAR_APP }}
           teamId: ${{ secrets.YOUR_TEAM_ID_OF_LINEAR_APP }}
           stateId: ${{ secrets.YOUR_STATE_ID_OF_LINEAR_APP }}
-          embed: month=July,day=13
+          embed: month=July,day=13,labelIds="${{ secrets.LINEAR_AUTOMATION_LABEL_ID }}, ${{ secrets.LINEAR_MAINTENANCE_LABEL_ID }}"
 ```
 
 **result**
