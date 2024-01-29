@@ -35,7 +35,23 @@ describe(Linear, () => {
               issue: {
                 id: "107823cc-xxxx-xxxx-xxxx-b4cfdb9a03b7",
                 title: "This is title",
+                identifier: "LIN-111",
               },
+            },
+          },
+        });
+
+      nock(basePath)
+        .post(endpoint, {
+          query: /.+/,
+          variables: {
+            id: "107823cc-xxxx-xxxx-xxxx-b4cfdb9a03b7",
+          },
+        })
+        .reply(200, {
+          data: {
+            issue: {
+              identifier: "LIN-111",
             },
           },
         });
@@ -44,15 +60,8 @@ describe(Linear, () => {
         title: "This is title",
         description: "hoge",
       });
-      // @ts-ignore
-      const issue = actual?._issue;
-      expect({ success: true, _issue: issue }).toEqual({
-        _issue: {
-          id: "107823cc-xxxx-xxxx-xxxx-b4cfdb9a03b7",
-          title: "This is title",
-        },
-        success: true,
-      });
+
+      expect(actual).toEqual("LIN-111");
     });
 
     test("create issue from markdown", async () => {
@@ -85,6 +94,21 @@ describe(Linear, () => {
           },
         });
 
+      nock(basePath)
+        .post(endpoint, {
+          query: /.+/,
+          variables: {
+            id: "107823cc-xxxx-xxxx-xxxx-b4cfdb9a03b7",
+          },
+        })
+        .reply(200, {
+          data: {
+            issue: {
+              identifier: "LIN-222",
+            },
+          },
+        });
+
       const data = readFileSync("./src/__tests__/test.md");
       const issueData = linear.readData(data);
       expect(issueData).toEqual({
@@ -95,19 +119,7 @@ describe(Linear, () => {
       });
 
       const actual = await linear.createIssue();
-
-      // @ts-ignore
-      const issue = actual?._issue;
-      expect({ success: true, _issue: issue }).toEqual({
-        _issue: {
-          id: "107823cc-xxxx-xxxx-xxxx-b4cfdb9a03b7",
-          title: "test issue",
-          estimate: 1,
-          description:
-            "\n\n## Items\n* Item 1\n* Item 2\n* Item 3\n\n## CheckBoxes\n- [ ] CheckBox 1\n- [ ] CheckBox 2\n\n*created by [hoge](https://github.com)*\n",
-        },
-        success: true,
-      });
+      expect(actual).toEqual("LIN-222");
     });
 
     test("create issue with dryrun", async () => {
